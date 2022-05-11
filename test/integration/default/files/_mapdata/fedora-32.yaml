@@ -1,0 +1,51 @@
+# yamllint disable rule:indentation rule:line-length
+# Fedora-32
+---
+values:
+  added_in_defaults: defaults_value
+  added_in_lookup: lookup_value
+  added_in_pillar: pillar_value
+  lookup:
+    arch: amd64
+    rootgroup: root
+    config: '/etc/borgmatic/config.yaml'
+    pkg:
+      name: borgmatic
+      reqs:
+        - borgbackup
+        - python3
+        - python3-pip
+    service:
+      name: borgmatic
+      timer: /etc/systemd/system/{name}.timer
+      unit: /etc/systemd/system/{name}.service
+    ssh_key_pillar: borgmatic_secrets:ssh
+  autoupdate: true
+  config: {}
+  encryption: none
+  install_global: false
+  known_hosts: {}
+  service:
+    rand_delay: 3h
+    timer: daily
+  map_jinja:
+    sources:
+    - Y:G@osarch
+    - Y:G@os_family
+    - Y:G@os
+    - Y:G@osfinger
+    - C@borgmatic
+    - Y:G@id
+  master: template-master
+  tofs:
+    files_switch:
+    - any/path/can/be/used/here
+    - id
+    - roles
+    - osfinger
+    - os
+    - os_family
+    source_files:
+      borgmatic-config-file-file-managed:
+      - example.tmpl.jinja
+  winner: pillar

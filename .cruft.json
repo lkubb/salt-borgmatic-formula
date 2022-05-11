@@ -1,0 +1,59 @@
+{
+  "template": "https://github.com/lkubb/salt-template-formula",
+  "commit": "50a694adefdf54f1ca465db433c033ca764942bc",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "_extensions": [
+        "local_extensions.YAMLDumper"
+      ],
+      "_jinja2_env_vars": {
+        "block_start_string": "{!",
+        "block_end_string": "!}",
+        "variable_start_string": "{=",
+        "variable_end_string": "=}",
+        "comment_start_string": "{@",
+        "comment_end_string": "@}"
+      },
+      "name": "Borgmatic",
+      "abbr": "borgmatic",
+      "abbr_pysafe": "borgmatic",
+      "pkg": "borgmatic",
+      "needs_repo": "",
+      "config": "/etc/borgmatic/config.yaml",
+      "service": "borgmatic",
+      "subcomponent": "",
+      "subcomponent_config": "",
+      "git_username": "lkubb",
+      "_lookup": {
+        "pkg": {
+          "name": "borgmatic",
+          "reqs": [
+            "borgbackup",
+            "python3",
+            "python3-pip"
+          ]
+        },
+        "service": {
+          "name": "borgmatic",
+          "unit": "/etc/systemd/system/{name}.service",
+          "timer": "/etc/systemd/system/{name}.timer"
+        },
+        "ssh_key_pillar": "borgmatic_secrets:ssh"
+      },
+      "_settings": {
+        "autoupdate": true,
+        "config": {},
+        "encryption": "none",
+        "install_global": false,
+        "known_hosts": {},
+        "service": {
+          "rand_delay": "3h",
+          "timer": "daily"
+        }
+      },
+      "_template": "https://github.com/lkubb/salt-template-formula"
+    }
+  },
+  "directory": null
+}

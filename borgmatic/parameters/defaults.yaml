@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+#
+# Set default values.
+---
+values:
+  lookup:
+    rootgroup: root
+    config: '/etc/borgmatic/config.yaml'
+    pkg:
+      name: borgmatic
+      reqs:
+        - borgbackup
+        - python3
+        - python3-pip
+    service:
+      name: borgmatic
+      timer: /etc/systemd/system/{name}.timer
+      unit: /etc/systemd/system/{name}.service
+    ssh_key_pillar: borgmatic_secrets:ssh
+  autoupdate: true
+  config: {}
+  encryption: none
+  install_global: false
+  known_hosts: {}
+  service:
+    rand_delay: 3h
+    timer: daily
+  # Just here for testing
+  added_in_defaults: defaults_value
+  winner: defaults
+...
