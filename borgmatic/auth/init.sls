@@ -25,7 +25,9 @@ Borg SSH key is default:
       - Borg SSH key is setup
 {%- endif %}
 
-{%- if borgmatic.known_hosts %}
+{%- set borg_servers = salt["mine.get"]("borg_role:server", "ssh.host_keys", tgt_type="pillar") %}
+
+{%- if borgmatic.known_hosts or borg_servers %}
 
 Borg hosts are known:
   ssh_known_hosts.present:
@@ -35,6 +37,19 @@ Borg hosts are known:
 {%-     for conf, val in config.items() %}
         - {{ conf }}: {{ val }}
 {%-     endfor %}
+{%-   endfor %}
+{%-   for minion, keys in borg_servers.items() %}
+{%-     set minion_ip = salt["mine.get"](minion, "default_addrs")[minion][0] | default(false) %}
+{%-     if minion_ip %}
+{%-       for key in keys.values() %}
+{%-         if "ssh-ed25519" in key %}
+{%-           set key_type, key_val = key.split(maxsplit=1)%}
+        - {{ minion_ip }}:
+          - enc: {{ key_type }}
+          - key: {{ key_val.split()[0] }}
+{%-         endif %}
+{%-       endfor %}
+{%-     endif %}
 {%-   endfor %}
     - user: root
 {%- endif %}

@@ -8,6 +8,12 @@ borgmatic:
   config: {}
   encryption: none
   install_global: false
+    # Mapping of FQDN/hostname/IP to host key.
+    # Furthermore, host keys will be autodisovered if
+    # a) borg servers have the pillar value `borg_role: server` (see borg formula)
+    # b) they expose their host keys in the mine as `ssh.host_keys`
+    # c) they expose their IP address as `default_addr`
+    # d) they report an "ed25519" key (opinionated choice ;])
   known_hosts: {}
   service:
     rand_delay: 3h
