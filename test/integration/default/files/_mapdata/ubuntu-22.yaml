@@ -9,8 +9,6 @@ values:
     arch: amd64
     rootgroup: root
     config: '/etc/borgmatic/config.yaml'
-    service:
-      name: borgmatic
     pkg:
       name: borgmatic
       reqs:

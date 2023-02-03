@@ -8,8 +8,6 @@ borgmatic:
     winner: lookup
     added_in_lookup: lookup_value
     config: '/etc/borgmatic/config.yaml'
-    service:
-      name: borgmatic
     pkg:
       name: borgmatic
       reqs:
