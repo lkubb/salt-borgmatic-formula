@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
 {%- set tplroot = tpldir.split('/')[0] %}
@@ -9,17 +8,17 @@
 include:
   - {{ sls_package_install }}
 
-borgmatic-config-file-file-managed:
+Borgmatic configuration is managed:
   file.managed:
     - name: {{ borgmatic.lookup.config }}
-    - source: {{ files_switch(['config.yaml'],
-                              lookup='borgmatic-config-file-file-managed'
-                 )
-              }}
-    - mode: 644
+    - source: {{ files_switch(["config.yaml", "config.yaml.j2"],
+                              lookup="Borgmatic configuration is managed"
+                  )
+               }}
+    - mode: '0644'
     - user: root
     - group: {{ borgmatic.lookup.rootgroup }}
-    - makedirs: True
+    - makedirs: true
     - template: jinja
     - require:
       - sls: {{ sls_package_install }}

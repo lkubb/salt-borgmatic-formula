@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
 {%- set tplroot = tpldir.split('/')[0] %}
@@ -14,7 +13,7 @@ Borgmatic repository is initialized:
     - onchanges:
       - sls: {{ sls_config_file }}
 
-borgmatic-service-running-service-running:
+Borgmatic timer is enabled:
   service.running:
     - name: {{ borgmatic.lookup.service.name }}.timer
     - enable: True

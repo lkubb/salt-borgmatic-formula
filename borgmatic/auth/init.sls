@@ -1,5 +1,11 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    Manages SSH secrets and known hosts.
+
+    If you use my `Borg formula <https://github.com/lkubb/salt-borg-formula>`_,
+    you might be better off using its ``borg.client`` state instead.
+#}
 
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- set sls_config_file = tplroot ~ '.config.file' %}
@@ -43,7 +49,7 @@ Borg hosts are known:
 {%-     if minion_ip %}
 {%-       for key in keys.values() %}
 {%-         if "ssh-ed25519" in key %}
-{%-           set key_type, key_val = key.split(maxsplit=1)%}
+{%-           set key_type, key_val = key.split(maxsplit=1) %}
         - {{ minion_ip }}:
           - enc: {{ key_type }}
           - key: {{ key_val.split()[0] }}

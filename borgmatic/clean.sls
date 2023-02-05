@@ -1,5 +1,15 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    *Meta-state*.
+
+    Undoes everything performed in the ``borgmatic`` meta-state
+    in reverse order, i.e.
+    removes borg SSH configuration,
+    stops the service,
+    removes the configuration file and then
+    uninstalls the package.
+#}
 
 include:
   - .auth.clean

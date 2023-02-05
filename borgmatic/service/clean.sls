@@ -1,10 +1,13 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
+
+{#-
+    Stops/disables the borgmatic timer.
+#}
 
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as borgmatic with context %}
 
-borgmatic-service-clean-service-dead:
+Borgmatic timer is disabled:
   service.dead:
     - name: {{ borgmatic.lookup.service.name }}.timer
     - enable: False
