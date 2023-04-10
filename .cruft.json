@@ -39,6 +39,7 @@
           "unit": "/etc/systemd/system/{name}.service",
           "timer": "/etc/systemd/system/{name}.timer"
         },
+        "scripts": "/opt/borgmatic/scripts",
         "ssh_key_pillar": "borgmatic_secrets:ssh"
       },
       "settings": {

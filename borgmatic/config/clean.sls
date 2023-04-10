@@ -14,6 +14,8 @@ include:
 
 Borgmatic configuration is absent:
   file.absent:
-    - name: {{ borgmatic.lookup.config }}
+    - names:
+      - {{ borgmatic.lookup.config }}
+      - {{ borgmatic.lookup.scripts }}
     - require:
       - sls: {{ sls_service_clean }}

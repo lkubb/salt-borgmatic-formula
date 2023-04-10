@@ -13,6 +13,7 @@ borgmatic:
         - borgbackup
         - python3
         - python3-pip
+    scripts: /opt/borgmatic/scripts
     service:
       name: borgmatic
       timer: /etc/systemd/system/{name}.timer

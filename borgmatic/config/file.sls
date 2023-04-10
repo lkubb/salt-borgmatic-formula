@@ -24,3 +24,21 @@ Borgmatic configuration is managed:
       - sls: {{ sls_package_install }}
     - context:
         borgmatic: {{ borgmatic | json }}
+
+Borgmatic scripts are synced:
+  file.recurse:
+    - name: {{ borgmatic.lookup.scripts }}
+    - source: {{ files_switch(["scripts"],
+                              lookup="Borgmatic scripts are synced"
+                  )
+               }}
+    - file_mode: '0755'
+    - dir_mode: '0755'
+    - user: root
+    - group: {{ borgmatic.lookup.rootgroup }}
+    - makedirs: true
+    - clean: true
+    - exclude_pat:
+      - '*/.gitkeep'
+    - require:
+      - sls: {{ sls_package_install }}
