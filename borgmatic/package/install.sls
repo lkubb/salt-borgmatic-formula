@@ -1,6 +1,6 @@
 # vim: ft=sls
 
-{%- set tplroot = tpldir.split('/')[0] %}
+{%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as borgmatic with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
@@ -21,8 +21,8 @@ Borgmatic is installed:
 Borgmatic service is installed:
   file.managed:
     - name: {{ borgmatic.lookup.service.unit.format(name=borgmatic.lookup.service.name) }}
-    - source: {{ files_switch(['borgmatic.service.j2'],
-                              lookup='Borgmatic service is installed'
+    - source: {{ files_switch(["borgmatic.service.j2"],
+                              lookup="Borgmatic service is installed"
                  )
               }}
     - template: jinja
@@ -35,8 +35,8 @@ Borgmatic service is installed:
 Borgmatic timer is installed:
   file.managed:
     - name: {{ borgmatic.lookup.service.timer.format(name=borgmatic.lookup.service.name) }}
-    - source: {{ files_switch(['borgmatic.timer.j2'],
-                              lookup='Borgmatic timer is installed'
+    - source: {{ files_switch(["borgmatic.timer.j2"],
+                              lookup="Borgmatic timer is installed"
                  )
               }}
     - template: jinja

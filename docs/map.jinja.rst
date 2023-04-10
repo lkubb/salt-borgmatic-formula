@@ -73,7 +73,7 @@ Create the file ``/etc/salt/master.d/fileserver.conf`` and restart the ``master`
 
 
 Create per DNS configuration for ``borgmatic`` formula
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now, we can provides the per DNS domain name configuration files for the ``borgmatic`` formulas under ``/srv/salt/borgmatic/parameters/``.
 
@@ -104,7 +104,7 @@ We create another configuration for the DNS domain ``example.com`` in the Jinja 
 
 
 Create per role configuration for ``borgmatic`` formula
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now, we can provides the per role configuration files for the ``borgmatic`` formulas under ``/srv/salt/borgmatic/parameters/``.
 
@@ -474,7 +474,6 @@ Here is an example based on `template-formula/borgmatic/config/file.sls`_:
 
 .. code-block:: sls
 
-    # -*- coding: utf-8 -*-
     # vim: ft=sls
 
     {#- Get the `tplroot` from `tpldir` #}

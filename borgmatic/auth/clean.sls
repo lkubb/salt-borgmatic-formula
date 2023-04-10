@@ -4,8 +4,8 @@
     Removes managed SSH secrets and known hosts.
 #}
 
-{%- set tplroot = tpldir.split('/')[0] %}
-{%- set sls_config_file = tplroot ~ '.config.file' %}
+{%- set tplroot = tpldir.split("/")[0] %}
+{%- set sls_config_file = tplroot ~ ".config.file" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as borgmatic with context %}
 
 {%- if salt["pillar.get"](borgmatic.lookup.ssh_key_pillar) %}
@@ -13,7 +13,7 @@
 Borg SSH key is not default:
   file.replace:
     - name: {{ salt["user.info"]("root").home | path_join(".ssh", "config") }}
-    - pattern: {{ 'IdentityFile ~/.ssh/id_borg' | regex_escape }}
+    - pattern: {{ "IdentityFile ~/.ssh/id_borg" | regex_escape }}
     - repl: ''
 
 Borg SSH key is absent:
