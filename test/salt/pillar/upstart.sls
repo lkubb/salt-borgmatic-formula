@@ -25,6 +25,7 @@ borgmatic:
   install_global: false
   known_hosts: {}
   service:
+    exec_start_pre: []
     rand_delay: 3h
     timer: daily
 

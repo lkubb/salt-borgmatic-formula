@@ -27,6 +27,7 @@ borgmatic:
         - python3-pip
     scripts: /opt/borgmatic/scripts
     service:
+      exec_start_pre: []
       name: borgmatic
       timer: /etc/systemd/system/{name}.timer
       unit: /etc/systemd/system/{name}.service
