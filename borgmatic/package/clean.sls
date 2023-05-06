@@ -17,10 +17,17 @@ Borgmatic is removed:
     - names:
       - {{ borgmatic.lookup.service.unit.format(name=borgmatic.lookup.service.name) }}
       - {{ borgmatic.lookup.service.timer.format(name=borgmatic.lookup.service.name) }}
+{%- if borgmatic.install == "venv" %}
+      - {{ borgmatic.lookup.paths.install }}
+      - {{ borgmatic.lookup.paths.bin }}
+{%- else %}
   pip.removed:
     - name: {{ borgmatic.lookup.pkg.name }}
     - user: root
-{%- if not borgmatic.install_global %}
+    # onedir/relenv breaks this otherwise
+    - bin_env: __slot__:salt:cmd.run_stdout("command -v pip")
+{%-   if not borgmatic.install_global %}
     - install_options:
       - --user
+{%-   endif %}
 {%- endif %}

@@ -1,3 +1,7 @@
+{%- set borgmatic_bin = borgmatic.lookup.paths.bin %}
+{%- if borgmatic.install != "venv" and not borgmatic.install_global %}
+{%-   set borgmatic_bin = "/root/.local/bin/borgmatic" %}
+{%- endif -%}
 [Unit]
 Description=borgmatic backup
 Wants=network-online.target
@@ -65,4 +69,4 @@ ExecStartPre=sleep 1m
 ExecStartPre={{ cmd }}
 {%- endfor %}
 ExecStart=systemd-inhibit --who="borgmatic" --why="Prevent interrupting scheduled backup" \
-    {{ "/root/.local/bin/" if not borgmatic.install_global }}borgmatic --verbosity -1 --syslog-verbosity 1
+    {{ borgmatic_bin }} --verbosity -1 --syslog-verbosity 1

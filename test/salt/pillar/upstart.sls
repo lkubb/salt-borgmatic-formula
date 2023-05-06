@@ -7,27 +7,33 @@ borgmatic:
     winner: lookup
     added_in_lookup: lookup_value
     config: '/etc/borgmatic/config.yaml'
+    paths:
+      bin: /usr/local/bin/borgmatic
+      install: /opt/borgmatic
     pkg:
       name: borgmatic
       reqs:
         - borgbackup
         - python3
         - python3-pip
+        - python3-virtualenv
     scripts: /opt/borgmatic/scripts
     service:
       name: borgmatic
       timer: /etc/systemd/system/{name}.timer
       unit: /etc/systemd/system/{name}.service
     ssh_key_pillar: borgmatic_secrets:ssh
-  autoupdate: true
   config: {}
   encryption: none
+  install: venv
   install_global: false
   known_hosts: {}
+  pip_pkgs: []
   service:
     exec_start_pre: []
     rand_delay: 3h
     timer: daily
+  version: latest
 
   tofs:
     # The files_switch key serves as a selector for alternative

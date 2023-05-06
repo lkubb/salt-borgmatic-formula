@@ -8,14 +8,40 @@ Borgmatic required packages are installed:
   pkg.installed:
     - pkgs: {{ borgmatic.lookup.pkg.reqs | json }}
 
+{%- if borgmatic.install == "venv" %}
+
+Borgmatic is installed:
+  virtualenv.managed:
+    - name: {{ borgmatic.lookup.paths.install }}
+    - python: python3
+    - pip_upgrade: {{ "latest" == borgmatic.version }}
+    - pip_pkgs:
+{%-   if "latest" != borgmatic.version %}
+      - borgmatic=={{ version }}
+{%-   else %}
+      - borgmatic
+{%-   endif %}
+{%-   for pkg in borgmatic.pip_pkgs %}
+      - {{ pkg }}
+{%-   endfor %}
+  file.symlink:
+    - name: {{ borgmatic.lookup.paths.bin }}
+    - target: {{ borgmatic.lookup.paths.install | path_join("bin", "borgmatic") }}
+    - require:
+      - virtualenv: {{ borgmatic.lookup.paths.install }}
+{%- else %}
+
 Borgmatic is installed:
   pip.installed:
     - name: {{ borgmatic.lookup.pkg.name }}
+    # onedir/relenv breaks this otherwise
+    - bin_env: __slot__:salt:cmd.run_stdout("command -v pip")
     - user: root
-    - upgrade: {{ borgmatic.autoupdate | to_bool }}
-{%- if not borgmatic.install_global %}
+    - upgrade: {{ borgmatic.get("autoupdate", borgmatic.version == "latest") | to_bool }}
+{%-   if not borgmatic.install_global %}
     - extra_args:
       - --user
+{%-   endif %}
 {%- endif %}
 
 Borgmatic service is installed:
@@ -31,6 +57,8 @@ Borgmatic service is installed:
     - user: root
     - group: {{ borgmatic.lookup.rootgroup }}
     - mode: '0644'
+    - require:
+      - Borgmatic is installed
 
 Borgmatic timer is installed:
   file.managed:
@@ -45,3 +73,5 @@ Borgmatic timer is installed:
     - user: root
     - group: {{ borgmatic.lookup.rootgroup }}
     - mode: '0644'
+    - require:
+      - Borgmatic is installed

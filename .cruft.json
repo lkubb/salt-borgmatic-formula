@@ -26,12 +26,17 @@
       "subcomponent_config": "",
       "git_username": "lkubb",
       "lookup": {
+        "paths": {
+          "install": "/opt/borgmatic",
+          "bin": "/usr/local/bin/borgmatic"
+        },
         "pkg": {
           "name": "borgmatic",
           "reqs": [
             "borgbackup",
             "python3",
-            "python3-pip"
+            "python3-pip",
+            "python3-virtualenv"
           ]
         },
         "service": {
@@ -43,16 +48,18 @@
         "ssh_key_pillar": "borgmatic_secrets:ssh"
       },
       "settings": {
-        "autoupdate": true,
         "config": {},
         "encryption": "none",
+        "install": "venv",
         "install_global": false,
         "known_hosts": {},
+        "pip_pkgs": [],
         "service": {
           "exec_start_pre": [],
           "rand_delay": "3h",
           "timer": "daily"
-        }
+        },
+        "version": "latest"
       },
       "_template": "https://github.com/lkubb/salt-template-formula"
     }

@@ -3,9 +3,11 @@
 ---
 borgmatic:
 
-  autoupdate: true
   config: {}
   encryption: none
+    # install method - venv or pip (the latter fails from 3006 on -> relenv)
+  install: venv
+    # when install == pip, install borgmatic globally
   install_global: false
     # Mapping of FQDN/hostname/IP to host key.
     # Furthermore, host keys will be autodisovered if
@@ -14,9 +16,13 @@ borgmatic:
     # c) they expose their IP address as `default_addr`
     # d) they report an "ed25519" key (opinionated choice ;])
   known_hosts: {}
+  pip_pkgs: []
   service:
+    exec_start_pre: []
     rand_delay: 3h
     timer: daily
+    # the version to install. `latest` will auto-upgrade
+  version: latest
 
   lookup:
     pkg:
@@ -27,7 +33,6 @@ borgmatic:
         - python3-pip
     scripts: /opt/borgmatic/scripts
     service:
-      exec_start_pre: []
       name: borgmatic
       timer: /etc/systemd/system/{name}.timer
       unit: /etc/systemd/system/{name}.service
