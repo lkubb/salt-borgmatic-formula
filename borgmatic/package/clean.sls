@@ -26,8 +26,4 @@ Borgmatic is removed:
     - user: root
     # onedir/relenv breaks this otherwise
     - bin_env: __slot__:salt:cmd.run_stdout("command -v pip")
-{%-   if not borgmatic.install_global %}
-    - install_options:
-      - --user
-{%-   endif %}
 {%- endif %}
