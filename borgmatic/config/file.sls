@@ -21,7 +21,7 @@ Borgmatic configuration is managed:
     - makedirs: true
     - template: jinja
     - require:
-      - sls: {{ sls_package_install }}
+      - Borgmatic is installed
     - context:
         borgmatic: {{ borgmatic | json }}
 
@@ -41,4 +41,4 @@ Borgmatic scripts are synced:
     - exclude_pat:
       - '*/.gitkeep'
     - require:
-      - sls: {{ sls_package_install }}
+      - Borgmatic is installed

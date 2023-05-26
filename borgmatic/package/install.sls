@@ -4,19 +4,43 @@
 {%- from tplroot ~ "/map.jinja" import mapdata as borgmatic with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
+{#- very crude onedir check – relenv pythonexecutable does not end with `run` #}
+{%- set onedir = grains.pythonexecutable.startswith("/opt/saltstack") %}
+
+Borg is available:
+  pkg.installed:
+    - name: {{ borgmatic.lookup.pkg.reqs.borg }}
+    - unless:
+      # avoid failing if it's not in the repo and managed otherwise
+      - fun: cmd.which
+        cmd: borg
+
 Borgmatic required packages are installed:
   pkg.installed:
-    - pkgs: {{ borgmatic.lookup.pkg.reqs | json }}
+    - pkgs:
+      - {{ borgmatic.lookup.pkg.reqs.python }}
+      - {{ borgmatic.lookup.pkg.reqs.pip }}
 
 {%- if borgmatic.install == "venv" %}
+
+Virtualenv is installed:
+  pkg.installed:
+    - name: {{ borgmatic.lookup.pkg.reqs.venv.pkg }}
+  pip.installed:
+    - name: {{ borgmatic.lookup.pkg.reqs.venv.pip }}
+    - bin_env: __slot__:salt:cmd.which_bin(["pip3", "pip"])
+    - onfail:
+      - pkg: {{ borgmatic.lookup.pkg.reqs.venv.pkg }}
+    - require:
+      - Borgmatic required packages are installed
 
 Borgmatic is installed:
   virtualenv.managed:
     - name: {{ borgmatic.lookup.paths.install }}
     - python: python3
-    - pip_upgrade: {{ "latest" == borgmatic.version }}
+    - pip_upgrade: {{ borgmatic.version == "latest" }}
     - pip_pkgs:
-{%-   if "latest" != borgmatic.version %}
+{%-   if borgmatic.version != "latest" %}
       - borgmatic=={{ version }}
 {%-   else %}
       - borgmatic
@@ -24,6 +48,9 @@ Borgmatic is installed:
 {%-   for pkg in borgmatic.pip_pkgs %}
       - {{ pkg }}
 {%-   endfor %}
+    - require_any:
+      - pkg: {{ borgmatic.lookup.pkg.reqs.venv.pkg }}
+      - pip: {{ borgmatic.lookup.pkg.reqs.venv.pip }}
   file.symlink:
     - name: {{ borgmatic.lookup.paths.bin }}
     - target: {{ borgmatic.lookup.paths.install | path_join("bin", "borgmatic") }}
@@ -42,6 +69,8 @@ Borgmatic is installed:
     - extra_args:
       - --user
 {%-   endif %}
+    - require:
+      - Borgmatic required packages are installed
 {%- endif %}
 
 Borgmatic service is installed:

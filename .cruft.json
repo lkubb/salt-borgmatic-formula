@@ -32,12 +32,15 @@
         },
         "pkg": {
           "name": "borgmatic",
-          "reqs": [
-            "borgbackup",
-            "python3",
-            "python3-pip",
-            "python3-virtualenv"
-          ]
+          "reqs": {
+            "borg": "borgbackup",
+            "python": "python3",
+            "pip": "python3-pip",
+            "venv": {
+              "pkg": "python3-virtualenv",
+              "pip": "virtualenv"
+            }
+          }
         },
         "service": {
           "name": "borgmatic",

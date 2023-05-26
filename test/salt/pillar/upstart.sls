@@ -13,10 +13,12 @@ borgmatic:
     pkg:
       name: borgmatic
       reqs:
-        - borgbackup
-        - python3
-        - python3-pip
-        - python3-virtualenv
+        borg: borgbackup
+        pip: python3-pip
+        python: python3
+        venv:
+          pip: virtualenv
+          pkg: python3-virtualenv
     scripts: /opt/borgmatic/scripts
     service:
       name: borgmatic
