@@ -2,7 +2,7 @@
 
 {#-
     Removes the borgmatic package.
-    Has a depency on `borgmatic.config.clean`_.
+    Has a dependency on `borgmatic.config.clean`_.
 #}
 
 {%- set tplroot = tpldir.split("/")[0] %}

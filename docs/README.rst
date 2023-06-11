@@ -106,7 +106,7 @@ uninstalls the package.
 ``borgmatic.package.clean``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Removes the borgmatic package.
-Has a depency on `borgmatic.config.clean`_.
+Has a dependency on `borgmatic.config.clean`_.
 
 
 ``borgmatic.config.clean``

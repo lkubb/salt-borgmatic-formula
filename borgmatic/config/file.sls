@@ -3,7 +3,7 @@
 {%- set tplroot = tpldir.split("/")[0] %}
 {%- set sls_package_install = tplroot ~ ".package.install" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as borgmatic with context %}
-{%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
+{%- from tplroot ~ "/libtofsstack.jinja" import files_switch with context %}
 
 include:
   - {{ sls_package_install }}
@@ -11,8 +11,10 @@ include:
 Borgmatic configuration is managed:
   file.managed:
     - name: {{ borgmatic.lookup.config }}
-    - source: {{ files_switch(["config.yaml", "config.yaml.j2"],
-                              lookup="Borgmatic configuration is managed"
+    - source: {{ files_switch(
+                    ["config.yaml", "config.yaml.j2"],
+                    config=borgmatic,
+                    lookup="Borgmatic configuration is managed",
                   )
                }}
     - mode: '0644'
@@ -28,8 +30,10 @@ Borgmatic configuration is managed:
 Borgmatic scripts are synced:
   file.recurse:
     - name: {{ borgmatic.lookup.scripts }}
-    - source: {{ files_switch(["scripts"],
-                              lookup="Borgmatic scripts are synced"
+    - source: {{ files_switch(
+                    ["scripts"],
+                    config=borgmatic,
+                    lookup="Borgmatic scripts are synced",
                   )
                }}
     - file_mode: '0755'
