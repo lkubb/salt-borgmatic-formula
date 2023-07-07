@@ -28,7 +28,8 @@
       "lookup": {
         "paths": {
           "install": "/opt/borgmatic",
-          "bin": "/usr/local/bin/borgmatic"
+          "bin": "/usr/local/bin/borgmatic",
+          "config_d": "/etc/borgmatic.d"
         },
         "pkg": {
           "name": "borgmatic",
@@ -52,6 +53,8 @@
       },
       "settings": {
         "config": {},
+        "config_d": {},
+        "config_d_common": {},
         "encryption": "none",
         "install": "venv",
         "install_global": false,

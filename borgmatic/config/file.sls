@@ -8,6 +8,9 @@
 include:
   - {{ sls_package_install }}
 
+{%- if borgmatic.config %}
+{#-   Avoid creating an empty configuration file since it causes errors #}
+
 Borgmatic configuration is managed:
   file.managed:
     - name: {{ borgmatic.lookup.config }}
@@ -26,6 +29,61 @@ Borgmatic configuration is managed:
       - Borgmatic is installed
     - context:
         borgmatic: {{ borgmatic | json }}
+{%- endif %}
+
+{%- if borgmatic.config_d %}
+
+Borgmatic multi-configuration is managed:
+  file.managed:
+    - names:
+{%-   for name, config in borgmatic.config_d.items() %}
+      - {{ borgmatic.lookup.paths.config_d | path_join(name ~ ".yaml") }}:
+          - context:
+              config: {{ config | json }}
+{%-   endfor %}
+    - source: {{ files_switch(
+                    ["config_d.yaml.j2"],
+                    config=borgmatic,
+                    lookup="Borgmatic multi-configuration is managed",
+                  )
+               }}
+    - template: jinja
+    - mode: '0600'
+    - user: root
+    - group: {{ borgmatic.lookup.rootgroup }}
+    - makedirs: true
+    - require:
+      - Borgmatic is installed
+    - default_context:
+        borgmatic: {{ borgmatic | json }}
+{%- endif %}
+
+{%- if borgmatic.config_d_common %}
+
+Borgmatic multi-configuration includes are managed:
+  file.managed:
+    - names:
+{%-   for name, config in borgmatic.config_d_common.items() %}
+      - {{ borgmatic.lookup.paths.config_d | path_join("common", name ~ ".yaml") }}:
+          - context:
+              config: {{ config | json }}
+{%-   endfor %}
+    - source: {{ files_switch(
+                    ["config_d.yaml.j2"],
+                    config=borgmatic,
+                    lookup="Borgmatic multi-configuration includes are managed",
+                  )
+               }}
+    - template: jinja
+    - mode: '0600'
+    - user: root
+    - group: {{ borgmatic.lookup.rootgroup }}
+    - makedirs: true
+    - require:
+      - Borgmatic is installed
+    - default_context:
+        borgmatic: {{ borgmatic | json }}
+{%- endif %}
 
 Borgmatic scripts are synced:
   file.recurse:

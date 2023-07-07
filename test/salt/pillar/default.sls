@@ -9,6 +9,7 @@ borgmatic:
     config: '/etc/borgmatic/config.yaml'
     paths:
       bin: /usr/local/bin/borgmatic
+      config_d: /etc/borgmatic.d
       install: /opt/borgmatic
     pkg:
       name: borgmatic
@@ -26,6 +27,8 @@ borgmatic:
       unit: /etc/systemd/system/{name}.service
     ssh_key_pillar: borgmatic_secrets:ssh
   config: {}
+  config_d: {}
+  config_d_common: {}
   encryption: none
   install: venv
   install_global: false

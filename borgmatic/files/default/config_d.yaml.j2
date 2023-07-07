@@ -1,0 +1,30 @@
+# Borgmatic configuration file managed by Salt.
+# Manual changes might be overwritten.
+---
+{%- macro render_node(node) %}
+{%-   if node is mapping %}
+{%-     if node | length == 2 and "tag" in node and "value" in node %}
+{%-       if node["value"] is not iterable or node["value"] is string %}
+{{- " " ~ node["tag"] }} {{- render_node(node["value"]) }}
+{%-       else %}
+{{- " " ~ node["tag"] }}
+{{- render_node(node["value"]) }}
+{%-       endif %}
+{%-     else %}
+{%-       for subnode_name, subnode in node.items() %}
+{{ subnode_name }}:
+  {{- render_node(subnode) | indent(2) }}
+{%-       endfor %}
+{%-     endif %}
+{%-   elif node is string -%}
+{{- " " ~ (node | json) }}
+{%-   elif node is iterable %}
+{%-     for subnode in node %}
+- {{- render_node(subnode) }}
+{%-     endfor %}
+{%-   else %}
+{{- " " ~ (node | json) }}
+{%-   endif %}
+{%- endmacro -%}
+
+{{ render_node(config) }}
