@@ -20,7 +20,7 @@
 {{- " " ~ (node | json) }}
 {%-   elif node is iterable %}
 {%-     for subnode in node %}
-- {{- render_node(subnode) }}
+- {{- render_node(subnode) | indent(2) }}
 {%-     endfor %}
 {%-   else %}
 {{- " " ~ (node | json) }}
