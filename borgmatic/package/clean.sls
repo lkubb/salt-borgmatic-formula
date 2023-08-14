@@ -21,9 +21,13 @@ Borgmatic is removed:
       - {{ borgmatic.lookup.paths.install }}
       - {{ borgmatic.lookup.paths.bin }}
 {%- else %}
+{%-   set pip =
+        salt["cmd.which_bin"](["/bin/pip3", "/usr/bin/pip3", "/bin/pip", "/usr/bin/pip"]) or
+        '__slot__:salt:cmd.which_bin(["/bin/pip3", "/usr/bin/pip3", "/bin/pip", "/usr/bin/pip"])'
+%}
   pip.removed:
     - name: {{ borgmatic.lookup.pkg.name }}
     - user: root
     # onedir/relenv breaks this otherwise
-    - bin_env: __slot__:salt:cmd.run_stdout("command -v pip")
+    - bin_env: {{ pip }}
 {%- endif %}

@@ -6,6 +6,11 @@
 
 {#- very crude onedir check – relenv pythonexecutable does not end with `run` #}
 {%- set onedir = grains.pythonexecutable.startswith("/opt/saltstack") %}
+{#- using slots for bin_env does not seem to work, causes fallback to salt-pip #}
+{%- set pip =
+      salt["cmd.which_bin"](["/bin/pip3", "/usr/bin/pip3", "/bin/pip", "/usr/bin/pip"]) or
+      '__slot__:salt:cmd.which_bin(["/bin/pip3", "/usr/bin/pip3", "/bin/pip", "/usr/bin/pip"])'
+%}
 
 Borg is available:
   pkg.installed:
@@ -28,7 +33,7 @@ Virtualenv is installed:
     - name: {{ borgmatic.lookup.pkg.reqs.venv.pkg }}
   pip.installed:
     - name: {{ borgmatic.lookup.pkg.reqs.venv.pip }}
-    - bin_env: __slot__:salt:cmd.which_bin(["pip3", "pip"])
+    - bin_env: {{ pip }}
     - onfail:
       - pkg: {{ borgmatic.lookup.pkg.reqs.venv.pkg }}
     - require:
@@ -62,7 +67,7 @@ Borgmatic is installed:
   pip.installed:
     - name: {{ borgmatic.lookup.pkg.name }}
     # onedir/relenv breaks this otherwise
-    - bin_env: __slot__:salt:cmd.run_stdout("command -v pip")
+    - bin_env: {{ pip }}
     - user: root
     - upgrade: {{ borgmatic.get("autoupdate", borgmatic.version == "latest") | to_bool }}
 {%-   if not borgmatic.install_global %}
