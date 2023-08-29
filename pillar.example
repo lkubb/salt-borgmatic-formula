@@ -32,6 +32,10 @@ borgmatic:
     exec_start_pre: []
     rand_delay: 3h
     timer: daily
+    # This formula syncs miscellaneous service units.
+    # You can request them to be run before the actual backup here.
+    # They should be `Type=oneshot`.
+    wants: []
     # the version to install. `latest` will auto-upgrade
   version: latest
 
@@ -52,6 +56,7 @@ borgmatic:
     scripts: /opt/borgmatic/scripts
     service:
       name: borgmatic
+      supporting_dir: /etc/systemd/system
       timer: /etc/systemd/system/{name}.timer
       unit: /etc/systemd/system/{name}.service
     ssh_key_pillar: borgmatic_secrets:ssh

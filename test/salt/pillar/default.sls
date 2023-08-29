@@ -23,6 +23,7 @@ borgmatic:
     scripts: /opt/borgmatic/scripts
     service:
       name: borgmatic
+      supporting_dir: /etc/systemd/system
       timer: /etc/systemd/system/{name}.timer
       unit: /etc/systemd/system/{name}.service
     ssh_key_pillar: borgmatic_secrets:ssh
@@ -38,6 +39,7 @@ borgmatic:
     exec_start_pre: []
     rand_delay: 3h
     timer: daily
+    wants: []
   version: latest
 
   tofs:

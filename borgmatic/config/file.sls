@@ -101,6 +101,31 @@ Borgmatic scripts are synced:
     - makedirs: true
     - clean: true
     - exclude_pat:
-      - '*/.gitkeep'
+      - .gitkeep
     - require:
       - Borgmatic is installed
+
+# Supporting services can be helpful to segment permissions,
+# especially with SELinux. They can be specified in `Wants`
+# to run before and should be `Type=oneshot`.
+Borgmatic supporting services are synced:
+  file.recurse:
+    - name: {{ borgmatic.lookup.service.supporting_dir }}
+    - source: {{ files_switch(
+                    ["services"],
+                    config=borgmatic,
+                    lookup="Borgmatic supporting services are synced",
+                  )
+               }}
+    - template: jinja
+    - file_mode: '0644'
+    - dir_mode: '0755'
+    - user: root
+    - group: {{ borgmatic.lookup.rootgroup }}
+    - makedirs: true
+    - exclude_pat:
+      - .gitkeep
+    - require:
+      - Borgmatic is installed
+    - context:
+        borgmatic: {{ borgmatic | json }}

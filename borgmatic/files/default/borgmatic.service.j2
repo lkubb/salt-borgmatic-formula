@@ -4,7 +4,7 @@
 {%- endif -%}
 [Unit]
 Description=borgmatic backup
-Wants=network-online.target
+Wants=network-online.target {{ borgmatic.service.wants | join(" ") }}
 After=network-online.target
 # Prevent borgmatic from running unless the machine is plugged into power. Remove this line if you
 # want to allow borgmatic to run anytime.

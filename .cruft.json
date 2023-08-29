@@ -46,7 +46,8 @@
         "service": {
           "name": "borgmatic",
           "unit": "/etc/systemd/system/{name}.service",
-          "timer": "/etc/systemd/system/{name}.timer"
+          "timer": "/etc/systemd/system/{name}.timer",
+          "supporting_dir": "/etc/systemd/system"
         },
         "scripts": "/opt/borgmatic/scripts",
         "ssh_key_pillar": "borgmatic_secrets:ssh"
@@ -63,7 +64,8 @@
         "service": {
           "exec_start_pre": [],
           "rand_delay": "3h",
-          "timer": "daily"
+          "timer": "daily",
+          "wants": []
         },
         "version": "latest"
       },
