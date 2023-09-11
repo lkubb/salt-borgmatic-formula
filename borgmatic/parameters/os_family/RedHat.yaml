@@ -13,4 +13,6 @@
 values:
   lookup:
     pkg_manager: yum
+    paths:
+      venv_bin: /usr/local/bin/virtualenv
 ...

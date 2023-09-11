@@ -29,7 +29,8 @@
         "paths": {
           "install": "/opt/borgmatic",
           "bin": "/usr/local/bin/borgmatic",
-          "config_d": "/etc/borgmatic.d"
+          "config_d": "/etc/borgmatic.d",
+          "venv_bin": "virtualenv"
         },
         "pkg": {
           "name": "borgmatic",

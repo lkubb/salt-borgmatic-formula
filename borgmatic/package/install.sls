@@ -43,6 +43,8 @@ Borgmatic is installed:
   virtualenv.managed:
     - name: {{ borgmatic.lookup.paths.install }}
     - python: python3
+    # pip installs into /usr/local/bin, which is not in root $PATH
+    - venv_bin: {{ borgmatic.lookup.paths.venv_bin }}
     - pip_upgrade: {{ borgmatic.version == "latest" }}
     - pip_pkgs:
 {%-   if borgmatic.version != "latest" %}

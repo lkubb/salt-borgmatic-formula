@@ -11,6 +11,7 @@ borgmatic:
       bin: /usr/local/bin/borgmatic
       config_d: /etc/borgmatic.d
       install: /opt/borgmatic
+      venv_bin: virtualenv
     pkg:
       name: borgmatic
       reqs:
