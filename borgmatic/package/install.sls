@@ -29,21 +29,28 @@ Borgmatic required packages are installed:
 {%- if borgmatic.install == "venv" %}
 
 Virtualenv is installed:
+{#-
+    Assume that venv_bin is only set when using pip.
+    This whole house of cards would be unnecessary if
+    the virtualenv module could use the inbuilt venv lib
+#}
+{%-   if not borgmatic.lookup.paths.venv_bin.startswith("/") %}
   pkg.installed:
     - name: {{ borgmatic.lookup.pkg.reqs.venv.pkg }}
+{%-   else %}
   pip.installed:
     - name: {{ borgmatic.lookup.pkg.reqs.venv.pip }}
     - bin_env: {{ pip }}
-    - onfail:
-      - pkg: {{ borgmatic.lookup.pkg.reqs.venv.pkg }}
     - require:
       - Borgmatic required packages are installed
+{%-   endif %}
+    - require_in:
+      - Borgmatic is installed
 
 Borgmatic is installed:
   virtualenv.managed:
     - name: {{ borgmatic.lookup.paths.install }}
     - python: python3
-    # pip installs into /usr/local/bin, which is not in root $PATH
     - venv_bin: {{ borgmatic.lookup.paths.venv_bin }}
     - pip_upgrade: {{ borgmatic.version == "latest" }}
     - pip_pkgs:
@@ -55,9 +62,6 @@ Borgmatic is installed:
 {%-   for pkg in borgmatic.pip_pkgs %}
       - {{ pkg }}
 {%-   endfor %}
-    - require_any:
-      - pkg: {{ borgmatic.lookup.pkg.reqs.venv.pkg }}
-      - pip: {{ borgmatic.lookup.pkg.reqs.venv.pip }}
   file.symlink:
     - name: {{ borgmatic.lookup.paths.bin }}
     - target: {{ borgmatic.lookup.paths.install | path_join("bin", "borgmatic") }}

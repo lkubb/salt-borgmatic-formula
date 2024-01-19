@@ -13,6 +13,12 @@
 values:
   lookup:
     pkg_manager: yum
+{%- set repos = salt["pkg.list_repos"]() %}
+{%- set epel_missing = repos.get("epel", {}).get("enabled", "0") != "1" %}
+{%- set crb_missing = repos.get("crb", {}).get("enabled", "0") != "1" %}
+{#- Without CRB, a dependency is missing #}
+{%- if epel_missing or crb_missing %}
     paths:
       venv_bin: /usr/local/bin/virtualenv
+{%- endif %}
 ...
