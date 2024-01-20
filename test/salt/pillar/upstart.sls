@@ -13,6 +13,10 @@ borgmatic:
       install: /opt/borgmatic
       venv_bin: virtualenv
     pkg:
+      extra:
+        mariadb-dump: mariadb
+        pg_dump: postgresql
+        sqlite3: sqlite
       name: borgmatic
       reqs:
         borg: borgbackup
@@ -32,6 +36,10 @@ borgmatic:
   config_d: {}
   config_d_common: {}
   encryption: none
+  extra_pkgs:
+    mariadb-dump: false
+    pg_dump: false
+    sqlite3: false
   install: venv
   install_global: false
   known_hosts: {}

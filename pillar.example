@@ -16,6 +16,12 @@ borgmatic:
     # Specify it in the same format as `config_d`.
   config_d_common: {}
   encryption: none
+    # For backing up databases, you will need the corresponding
+    # CLI tool installed. You can enable installation here.
+  extra_pkgs:
+    mariadb-dump: false
+    pg_dump: false
+    sqlite3: false
     # install method - venv or pip (the latter fails from 3006 on -> relenv)
   install: venv
     # when install == pip, install borgmatic globally
@@ -46,6 +52,10 @@ borgmatic:
       install: /opt/borgmatic
       venv_bin: virtualenv
     pkg:
+      extra:
+        mariadb-dump: mariadb
+        pg_dump: postgresql
+        sqlite3: sqlite
       name: borgmatic
       reqs:
         borg: borgbackup

@@ -42,6 +42,11 @@
               "pkg": "python3-virtualenv",
               "pip": "virtualenv"
             }
+          },
+          "extra": {
+            "mariadb-dump": "mariadb",
+            "sqlite3": "sqlite",
+            "pg_dump": "postgresql"
           }
         },
         "service": {
@@ -58,6 +63,11 @@
         "config_d": {},
         "config_d_common": {},
         "encryption": "none",
+        "extra_pkgs": {
+          "mariadb-dump": false,
+          "sqlite3": false,
+          "pg_dump": false
+        },
         "install": "venv",
         "install_global": false,
         "known_hosts": {},

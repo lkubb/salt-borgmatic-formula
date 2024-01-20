@@ -119,3 +119,15 @@ Borgmatic timer is installed:
     - mode: '0644'
     - require:
       - Borgmatic is installed
+
+{%- if borgmatic.extra_pkgs.values() | select | list %}
+
+Extra dependencies are installed for borgmatic:
+  pkg.installed:
+    - pkgs:
+{%-   for typ, enabled in borgmatic.extra_pkgs.items() %}
+{%-     if enabled %}
+      - {{ borgmatic.lookup.pkg.extra[typ] }}
+{%-     endif %}
+{%-   endfor %}
+{%- endif %}

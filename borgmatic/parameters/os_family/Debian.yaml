@@ -13,4 +13,8 @@
 values:
   lookup:
     pkg_manager: apt
+    pkg:
+      extra:
+        mysql-dump: maridb-client
+        sqlite3: sqlite3
 ...
