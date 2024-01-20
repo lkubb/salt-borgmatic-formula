@@ -23,3 +23,7 @@ Borgmatic timer is enabled:
     - enable: true
     - require:
       - Borgmatic repository is initialized
+
+# It seems the binary has to be invoked at least once from outside
+# the service to initialize /root/.borgmatic @TODO
+# At least on RedHat.
