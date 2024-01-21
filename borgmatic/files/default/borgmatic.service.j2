@@ -1,3 +1,17 @@
+{%- set dests = [] %}
+{%- set rw_paths = [] %}
+{%- set home_paths = [] %}
+{%- do dests.extend(borgmatic.config.get("repositories", [])) %}
+{%- for config in borgmatic.config_d.values() %}
+{%-   do dests.extend(config.get("repositories", [])) %}
+{%- endfor %}
+{%- for dest in dests %}
+{%-   if dest.path.startswith("/") %}
+{%-     do rw_paths.append(dest) %}
+{%-   elif dest.path.startswith("ssh://") %}
+{%-     do home_paths.append("/root/.ssh") %}
+{%-   endif %}
+{%- endfor %}
 {%- set borgmatic_bin = borgmatic.lookup.paths.bin %}
 {%- if borgmatic.install != "venv" and not borgmatic.install_global %}
 {%-   set borgmatic_bin = "/root/.local/bin/borgmatic" %}
@@ -40,12 +54,13 @@ SystemCallErrorNumber=EPERM
 # "ReadWritePaths", "ReadOnlyPaths", "ProtectHome", and "BindPaths". Then add any local repository
 # paths to the list of "ReadWritePaths" and local backup source paths to "ReadOnlyPaths". This
 # leaves most of the filesystem read-only to borgmatic.
-ProtectSystem=full
-# ReadWritePaths=-/mnt/my_backup_drive
-# ReadOnlyPaths=-/var/lib/my_backup_source
+ProtectSystem=strict
+{%- if rw_paths %}
+ReadWritePaths= {{- "-" ~ " -".join(rw_paths) }}
+{%- endif %}
 # This will mount a tmpfs on top of /root and pass through needed paths
-# ProtectHome=tmpfs
-# BindPaths=-/root/.cache/borg -/root/.cache/borg -/root/.borgmatic
+ProtectHome=tmpfs
+BindPaths=-/root/.cache/borg -/root/.cache/borg -/root/.borgmatic {{- " -" ~ " -".join(home_paths) }}
 
 # May interfere with running external programs within borgmatic hooks.
 CapabilityBoundingSet=CAP_DAC_READ_SEARCH CAP_NET_RAW
