@@ -14,6 +14,8 @@ include:
 Borgmatic repository is initialized:
   cmd.run:
     - name: {{ borgmatic_bin }} init --encryption {{ borgmatic.encryption }}
+    - env:
+      - BORG_RELOCATED_REPO_ACCESS_IS_OK: 'yes'
     - onchanges:
       - sls: {{ sls_config_file }}
 
