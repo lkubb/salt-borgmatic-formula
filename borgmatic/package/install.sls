@@ -120,6 +120,13 @@ Borgmatic timer is installed:
     - require:
       - Borgmatic is installed
 
+Borgmatic service units are reloaded:
+  module.run:
+    - service.systemctl_reload: {}
+    - onchanges:
+      - Borgmatic service is installed
+      - Borgmatic timer is installed
+
 {%- if borgmatic.extra_pkgs.values() | select | list %}
 
 Extra dependencies are installed for borgmatic:
