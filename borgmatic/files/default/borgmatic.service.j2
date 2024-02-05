@@ -1,9 +1,12 @@
 {%- set dests = [] %}
+{%- set sqlite_dbs = [] %}
 {%- set rw_paths = [] %}
 {%- set home_paths = [] %}
 {%- do dests.extend(borgmatic.config.get("repositories", [])) %}
+{%- do sqlite_dbs.extend(borgmatic.config.get("sqlite_databases", [])) %}
 {%- for config in borgmatic.config_d.values() %}
 {%-   do dests.extend(config.get("repositories", [])) %}
+{%-   do sqlite_dbs.extend(config.get("sqlite_databases", [])) %}
 {%- endfor %}
 {%- for dest in dests %}
 {%-   if dest.path.startswith("/") %}
@@ -11,6 +14,10 @@
 {%-   elif dest.path.startswith("ssh://") %}
 {%-     do home_paths.append("/root/.ssh") %}
 {%-   endif %}
+{%- endfor %}
+{%- for db in sqlite_dbs %}
+{#-   Even reading an SQLite DB requires write permissions to the directory (-wal/-shm) #}
+{%-   do rw_paths.append(salt["file.dirname"](db.path)) %}
 {%- endfor %}
 {%- set borgmatic_bin = borgmatic.lookup.paths.bin %}
 {%- if borgmatic.install != "venv" and not borgmatic.install_global %}
@@ -56,14 +63,14 @@ SystemCallErrorNumber=EPERM
 # leaves most of the filesystem read-only to borgmatic.
 ProtectSystem=strict
 {%- if rw_paths %}
-ReadWritePaths= {{- "-" ~ " -".join(rw_paths) }}
+ReadWritePaths= {{- "-" ~ " -".join(rw_paths | unique) }}
 {%- endif %}
 # This will mount a tmpfs on top of /root and pass through needed paths
 ProtectHome=tmpfs
-BindPaths=-/root/.cache/borg -/root/.cache/borg -/root/.borgmatic {{- " -" ~ " -".join(home_paths) }}
+BindPaths=-/root/.cache/borg -/root/.cache/borg -/root/.borgmatic {{- " -" ~ " -".join(home_paths | unique) }}
 
 # May interfere with running external programs within borgmatic hooks.
-CapabilityBoundingSet=CAP_DAC_READ_SEARCH CAP_NET_RAW
+CapabilityBoundingSet=CAP_DAC_READ_SEARCH CAP_NET_RAW {%- if sqlite_dbs %} CAP_DAC_OVERRIDE{%- endif %}
 
 # Lower CPU and I/O priority.
 Nice=19
