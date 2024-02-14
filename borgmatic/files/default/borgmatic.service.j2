@@ -92,3 +92,6 @@ ExecStartPre={{ cmd }}
 {%- endfor %}
 ExecStart=systemd-inhibit --who="borgmatic" --why="Prevent interrupting scheduled backup" \
     {{ borgmatic_bin }} --verbosity -1 --syslog-verbosity 1
+{%- for cmd in borgmatic.service.exec_stop_post %}
+ExecStopPost={{ cmd }}
+{%- endfor %}

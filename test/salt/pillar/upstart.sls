@@ -46,6 +46,7 @@ borgmatic:
   pip_pkgs: []
   service:
     exec_start_pre: []
+    exec_stop_post: []
     rand_delay: 3h
     timer: daily
     wants: []
